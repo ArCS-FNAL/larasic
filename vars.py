@@ -1,0 +1,17 @@
+N_ASICS    = 30  # Number of ASICs per LArIAT
+N_CHANNELS = 16  # Number of channels (bytes) per ASIC
+N_GLOBAL   = 1   # Number of global header bytes per ASIC
+N_SERIAL   = N_ASICS * ( N_CHANNELS + N_GLOBAL )
+TOTAL_CHANNELS = N_ASICS * N_CHANNELS
+SDF_M      = 0x1
+SDF_S      = 0
+SDC_M      = 0x1
+SDC_S      = 1
+ST_M       = 0x3
+ST_S       = 2
+SG_M       = 0x3
+SG_S       = 4
+SNC_M      = 0x1
+SNC_S      = 6
+STS_M      = 0x1
+STS_S      = 7
