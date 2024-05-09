@@ -1,6 +1,8 @@
 import serial
 import time
 
+from vars import *
+
 def pack_channel(gain=3,
                  filt=3,
                  dcOffset=0,
@@ -18,6 +20,42 @@ def pack_channel(gain=3,
 
 
     return ret
+
+def get_word(plane='induction'):
+
+    word = pack_channel(dcOffset=0 if plane == 'induction' else 1)
+
+    word = hex(word)
+
+    word = word.upper()[2:]
+
+    print('Word is', word)
+
+    return word
+
+
+def set_channels(ser):
+
+    print('Setting induction plane')
+
+    word = get_word(plane='induction')
+
+    cmd = f'edit {word} 0 {480/2-1:.0f}\r'
+
+    ser.write(cmd.encode())
+    printlines(ser)
+
+
+    print('Setting collection plane')
+
+    word = get_word(plane='collection')
+
+    cmd = f'edit {word} {480/2:.0f} {480-1:.0f}\r'
+
+    ser.write(cmd.encode())
+    printlines(ser)
+
+
 
 
 def printlines(ser):
