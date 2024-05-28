@@ -56,6 +56,42 @@ def set_channels(ser):
     printlines(ser)
 
 
+def set_channels_oneboard(ser):
+
+    print('Setting channels for a single board')
+
+    word = get_word(plane='collection')
+
+    cmd = f'edit {word} 0 {48-1:.0f}\r'
+
+    ser.write(cmd.encode())
+    printlines(ser)
+
+
+def set_test_channel(ser, ch):
+
+    # Get default word
+    word = get_word(plane='collection')
+
+    # str to int
+    word = int(word, 16)
+
+    # Set test bit to 1
+    word |= (1 << STS_S)
+
+    # To hex str
+    word = hex(word)
+
+    word = word.upper()[2:]
+
+    print('Updated word is', word)
+
+    cmd = f'edit {word} {ch} {ch}\r'
+
+    ser.write(cmd.encode())
+    printlines(ser)
+
+
 
 
 def printlines(ser):
