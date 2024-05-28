@@ -235,18 +235,24 @@ void shift_array()
         int board_start = num_boards - 1;
         int channel_start = num_channel + num_global - 1;
         byte channel_out = 0;
-	int mismatch = 0;   // tally of the mismatches during readback
+        int mismatch = 0;   // tally of the mismatches during readback
 
         digitalWrite(chip_select_pin, HIGH);
         //Outer loop through each cards (rows)
         for(int i = board_start; i >= 0; i--)
         {
+            Serial.print("*** NEW BOARD:");
+            Serial.println(i);
+
             //Inner loop through each ASIC chip (columns)
             for(int j = channel_start; j >= 0; j--)
             {
                 //This block of if / else if's is to turn the original array mapping
                 //into the mapping the LArASIC's are expecting. More is explained in
                 //the README.
+
+                Serial.print("*** NEW CHANNEL:");
+                Serial.println(j);
 
                 if((34 < j) && (j <= 50))
                     channel_out = j-3;
@@ -261,13 +267,20 @@ void shift_array()
                 else if(j == 0)
                     channel_out = 48;
 
+                Serial.print("*** Mapped to:");
+                Serial.println(channel_out);
+
                 //digitalWrite(chip_select_pin, HIGH);
-		delayMicroseconds(100);			
+                delayMicroseconds(100);			
                 byte val=config_array[i][channel_out];				
-		readBack[i][channel_out] = 0;
+                Serial.print("config_array = ");
+                Serial.println(val);
+                readBack[i][channel_out] = 0;
 				    for (byte k = 0; k < 8; k++)
 					{
 						digitalWrite(data_pin, (val & (1 << k)));
+                        Serial.print("Writing on data_pin = ");
+                        Serial.println((val & (1 << k)));
 						//Print the value of the bit that is sent
 						//if (val & (1 << k)){
 						//	Serial.print(1);
@@ -280,13 +293,15 @@ void shift_array()
 						digitalWrite(clock_pin, LOW);
 						delayMicroseconds(100);
 						// Print the value of the readback_pin- inverted due to circuitry
+                        Serial.print("Getting from digitalRead = ");
 						if (digitalRead(readback_pin)){
-						  // Serial.print(0);
+						  Serial.println(0);
 						} else {
-						  // Serial.print(1);
+						  Serial.println(1);
 						    readBack[i][channel_out] |= ( 1 << k );
 						}
 						if ((digitalRead(readback_pin)) == ((val >> k)& 1)){ 
+                        Serial.println("Is mismatch");
 						mismatch++; //remember- readback is inverted in circuit
 						//Serial.print("*");
 						}
