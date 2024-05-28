@@ -20,7 +20,7 @@ const byte max_size = 48;     //Maximum size of buffer
 static char* buf[max_arg];    //Command & Argument Buffer
 
 //Number of control boards & LArASIC chips
-const byte num_boards  = 10;  //Number of controller boards
+const byte num_boards  = 1;  //Number of controller boards
 const byte num_channel = 48;  //Number of channels per board
 const byte num_global  =  3;  //Number of global registers per board
 

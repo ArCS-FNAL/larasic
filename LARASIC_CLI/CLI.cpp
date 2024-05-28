@@ -13,7 +13,7 @@ static int testIsOn = 0;
 static int testPeriod = 128;
 static long long ticksSinceStart = 0;
 //static int nWires=384;
-static int nWires=480;
+static int nWires=48;
   
 void incrementTicks()
 {
