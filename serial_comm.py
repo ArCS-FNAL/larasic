@@ -92,6 +92,30 @@ def set_test_channel(ser, ch):
     printlines(ser)
 
 
+def set_all_test_channels(ser):
+
+    # Get default word
+    word = get_word(plane='collection')
+
+    # str to int
+    word = int(word, 16)
+
+    # Set test bit to 1
+    word |= (1 << STS_S)
+
+    # To hex str
+    word = hex(word)
+
+    word = word.upper()[2:]
+
+    print('Updated word is', word)
+
+    cmd = f'edit {word} 0 {48-1:.0f}\r'
+
+    ser.write(cmd.encode())
+    printlines(ser)
+
+
 
 
 def printlines(ser):
@@ -105,7 +129,8 @@ def printlines(ser):
 def serial_test():
 
     print('Opening serial...')
-    ser = serial.Serial('/dev/tty.usbmodem123451', 19200, timeout=1)
+    # ser = serial.Serial('/dev/tty.usbmodem123451', 19200, timeout=1)
+    ser = serial.Serial('/dev/ttyACM0', 19200, timeout=1)
     print('...serial is open.')
 
 
@@ -120,6 +145,51 @@ def serial_test():
     printlines(ser)
 
 
+
+def test_all_channels():
+    print('Opening serial...')
+    # ser = serial.Serial('/dev/tty.usbmodem123451', 19200, timeout=1)
+    ser = serial.Serial('/dev/ttyACM0', 19200, timeout=1)
+    print('...serial is open.')
+
+    print('HELP:')
+    ser.write(b'help\r')
+    printlines(ser)
+
+    print()
+
+    print('Is TEST on?')
+    ser.write(b'test\r')
+    printlines(ser)
+
+
+    print()
+
+    print('Current configuration:')
+    ser.write(b'print\r')
+    printlines(ser)
+
+    set_channels_oneboard(ser)
+    set_all_test_channels(ser)
+
+    # Have to shift twice to make it work
+
+    ser.write(b'shift\r')
+    printlines(ser)
+
+    ser.write(b'shift\r')
+    printlines(ser)
+
+    
+    print('Reading back from the serial chain:')
+    ser.write(b'readback\r')
+    printlines(ser)
+
+    print('Starting test pulser')
+    ser.write(b'teston 200\r')
+    printlines(ser)
+
 if __name__ == "__main__":
 
-    serial_test()
+    # serial_test()
+    test_all_channels()
