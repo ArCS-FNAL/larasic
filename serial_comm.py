@@ -1,6 +1,8 @@
 import serial
 import time
 
+import argparse
+
 from vars import *
 
 def pack_channel(gain=3,
@@ -10,6 +12,10 @@ def pack_channel(gain=3,
                  outputCoupling=0,
                  outputBuffer=0):
 
+    '''
+    Contructs the word to set a certain channel
+    '''
+
     ret = \
     ( ( ( gain & SG_M )          << SG_S  ) | 
     ( ( filt & ST_M )          << ST_S  ) | 
@@ -18,10 +24,12 @@ def pack_channel(gain=3,
     ( ( outputCoupling & SDC_M ) << SDC_S ) |
     ( ( outputBuffer & SDF_M )   << SDF_S ) )
 
-
     return ret
 
 def get_word(plane='induction'):
+    '''
+    Returns the channel word for the induction or collection plane
+    '''
 
     word = pack_channel(dcOffset=0 if plane == 'induction' else 1)
 
@@ -35,6 +43,10 @@ def get_word(plane='induction'):
 
 
 def set_channels(ser):
+    '''
+    Sets all the 480 channels.
+    Use this if all 10 boards are connected.
+    '''
 
     print('Setting induction plane')
 
@@ -57,6 +69,10 @@ def set_channels(ser):
 
 
 def set_channels_oneboard(ser):
+    '''
+    Sets 48 channels in a single board.
+    Use this if only one board is connected.
+    '''
 
     print('Setting channels for a single board')
 
@@ -69,6 +85,9 @@ def set_channels_oneboard(ser):
 
 
 def set_test_channel(ser, ch):
+    '''
+    Sets channel ch to be a test channel
+    '''
 
     # Get default word
     word = get_word(plane='collection')
@@ -93,6 +112,9 @@ def set_test_channel(ser, ch):
 
 
 def set_all_test_channels(ser):
+    '''
+    Sets all channels to be test channels
+    '''
 
     # Get default word
     word = get_word(plane='collection')
@@ -119,6 +141,9 @@ def set_all_test_channels(ser):
 
 
 def printlines(ser):
+    '''
+    Prints all lines from the serial chain
+    '''
 
     lines = ser.readlines()
 
@@ -127,6 +152,9 @@ def printlines(ser):
 
 
 def serial_test():
+    '''
+    Runs a simple test
+    '''
 
     print('Opening serial...')
     # ser = serial.Serial('/dev/tty.usbmodem123451', 19200, timeout=1)
