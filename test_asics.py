@@ -1,12 +1,14 @@
+'''
+A script to test the ASICs
+'''
 
 import argparse
 
 from serial_comm import *
 
 parser = argparse.ArgumentParser(
-                prog='ProgramName',
-                description='What the program does',
-                epilog='Text at the bottom of help')
+                prog='ASICTest',
+                description='Script to test LArASICs')
 
 parser.add_argument('-d', '--device', default='/dev/ttyACM0', help='Teensy USB device')
 parser.add_argument('-c', '--channel', default=0, help='Channel to test')
