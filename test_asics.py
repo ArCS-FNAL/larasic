@@ -3,6 +3,7 @@ A script to test the ASICs
 '''
 
 import argparse
+import sys, select
 
 from serial_comm import *
 
@@ -44,7 +45,9 @@ if args.pulser:
     ser.write(b'teston 200\r')
     printlines(ser)
 
-    input('Press enter to stop')
+    # input('Press enter to stop')
+    print("Press enter to stop (pulser will stop automatically in 60 seconds)")
+    i, o, e = select.select([sys.stdin], [], [], 60)
 
     ser.write(b'testoff\r')
     printlines(ser)
