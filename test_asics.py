@@ -46,8 +46,8 @@ if args.pulser:
     printlines(ser)
 
     # input('Press enter to stop')
-    print("Press enter to stop (pulser will stop automatically in 60 seconds)")
-    i, o, e = select.select([sys.stdin], [], [], 60)
+    print("Press enter to stop (pulser will stop automatically in 4 minutes)")
+    i, o, e = select.select([sys.stdin], [], [], 240)
 
     ser.write(b'testoff\r')
     printlines(ser)
