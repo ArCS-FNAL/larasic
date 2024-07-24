@@ -3,6 +3,7 @@ A script to test the ASICs
 '''
 
 import argparse
+import sys, select
 
 from serial_comm import *
 
@@ -22,7 +23,12 @@ print('Using device:', args.device)
 ser = serial.Serial(args.device, 19200, timeout=1)
 
 set_channels_oneboard(ser)
-set_test_channel(ser, args.channel)
+
+if args.channel == -1:
+    print('Setting all channels to TEST')
+    set_all_test_channels(ser)
+else:
+    set_test_channel(ser, args.channel)
 
 ser.write(b'shift\r')
 printlines(ser)
@@ -34,7 +40,14 @@ print('Reading back from the serial chain:')
 ser.write(b'readback\r')
 printlines(ser)
 
-if pulser:
+if args.pulser:
     print('Starting test pulser')
     ser.write(b'teston 200\r')
+    printlines(ser)
+
+    # input('Press enter to stop')
+    print("Press enter to stop (pulser will stop automatically in 60 seconds)")
+    i, o, e = select.select([sys.stdin], [], [], 60)
+
+    ser.write(b'testoff\r')
     printlines(ser)
