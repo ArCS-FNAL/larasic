@@ -1,0 +1,1 @@
+Please check the folder "New Tests_CMB" in order to see all the measurements for the channels. 
