@@ -1,1 +1,1 @@
-Please check the folder "New Tests_CMB" in order to see all the measurements for the channels. 
+The "non compiant measurements" folder contains some examples of signals whose maximum amplitude or pulse width does not behave as expected.
