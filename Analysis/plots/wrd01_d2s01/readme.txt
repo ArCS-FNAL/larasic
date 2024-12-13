@@ -1,0 +1,1 @@
+The "non compiant measurements" folder contains some examples of signals whose maximum amplitude or pulse width does not behave as expected.
