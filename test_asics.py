@@ -12,19 +12,26 @@ parser = argparse.ArgumentParser(
                 description='Script to test LArASICs')
 
 parser.add_argument('-d', '--device', default='/dev/ttyACM0', help='Teensy USB device')
-parser.add_argument('-c', '--channel', default=0, help='Channel to test')
+parser.add_argument('-c', '--channel', default=0, nargs='+', help='Channel to test')
 parser.add_argument('-p', '--pulser', default=False, help='Starts the pulser')
 
 
 args = parser.parse_args()
 
 print('Using device:', args.device)
+print('Setting this channel(s):', args.channel)
+
+if len(args.channel) == 1:
+    args.channel = args.channel[0]
 
 ser = serial.Serial(args.device, 19200, timeout=1)
 
 set_channels_oneboard(ser)
 
-if args.channel == -1:
+if isinstance(args.channel, list):
+    for ch in args.channel:
+        set_test_channel(ser, ch)
+elif args.channel == '-1':
     print('Setting all channels to TEST')
     set_all_test_channels(ser)
 else:
